@@ -1,7 +1,9 @@
 import React from 'react';
 
-export default function PizzaBlock(props) {
-  const { title, price } = props;
+export default function PizzaBlock({ title, price }) {
+  const [count, setCount] = React.useState(0);
+
+  const handleClick = () => setCount(count + 1);
 
   return (
     <div className="pizza-block">
@@ -24,7 +26,7 @@ export default function PizzaBlock(props) {
       </div>
       <div className="pizza-block__bottom">
         <div className="pizza-block__price">от {price} ₽</div>
-        <div className="button button--outline button--add">
+        <button onClick={handleClick} type="button" className="button button--outline button--add">
           <svg
             width="12"
             height="12"
@@ -38,8 +40,8 @@ export default function PizzaBlock(props) {
             />
           </svg>
           <span>Добавить</span>
-          <i>2</i>
-        </div>
+          <i>{count}</i>
+        </button>
       </div>
     </div>
   );
