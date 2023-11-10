@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react';
 import cn from 'classnames';
 
@@ -15,14 +13,12 @@ export default function Categories() {
 
   const [activeId, setActiveId] = React.useState(categories[0].id);
 
-  const handleClick = (id) => () => setActiveId(id);
-
   const renderItem = ({ name, id }) => (
     <li
       id={id}
       key={id}
       className={cn({ active: id === activeId })}
-      onClick={handleClick(id)}
+      onClick={() => setActiveId(id)}
     >
       {name}
     </li>
