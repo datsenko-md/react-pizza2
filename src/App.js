@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable */
+
 import React from 'react';
 import axios from 'axios';
 
@@ -8,30 +8,40 @@ import Header from './components/Header';
 import Categories from './components/Categories';
 import Sort from './components/Sort';
 import PizzaBlock from './components/PizzaBlock';
+import Skeleton from './components/PizzaBlock/Skeleton';
 
-// import pizzas from './assets/pizzas.json';
-
-const renderPizza = (pizza) => (
-  <PizzaBlock
-    key={pizza.id}
-    title={pizza.title}
-    price={pizza.price}
-    imageUrl={pizza.imageUrl}
-    sizes={pizza.sizes}
-    types={pizza.types}
+const renderItems = (items, Component) => items.map((item) => (
+  <Component
+    key={item.id}
+    title={item.title}
+    price={item.price}
+    imageUrl={item.imageUrl}
+    sizes={item.sizes}
+    types={item.types}
   />
-);
+));
+
+const getFakeItems = (length) => [...Array(length)].map((_, id) => ({ id }));
+
+const renderMap = {
+  loading: () => renderItems(getFakeItems(6), Skeleton),
+  loaded: (items) => renderItems(items, PizzaBlock),
+};
 
 const itemsUrl = 'https://654f0f0e358230d8f0ccfb7e.mockapi.io/items';
 
 function App() {
   const [items, setItems] = React.useState([]);
+  const [state, setState] = React.useState('loading');
+
   React.useEffect(() => {
     const getItems = async () => {
       try {
         const response = await axios.get(itemsUrl);
         setItems(response.data);
+        setState('loaded');
       } catch (err) {
+        // eslint-disable-next-line
         console.log(err);
       }
     };
@@ -50,7 +60,7 @@ function App() {
           </div>
           <h2 className="content__title">Все пиццы</h2>
           <div className="content__items">
-            {items.map(renderPizza)}
+            {renderMap[state](items)}
           </div>
         </div>
       </div>
