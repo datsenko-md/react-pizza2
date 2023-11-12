@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-filename-extension */
 
 import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
 import './scss/app.scss';
 import Header from './components/Header';
@@ -14,8 +15,10 @@ function App() {
       <Header />
       <div className="content">
         <div className="container">
-          <Home />
-          {/* <NotFound /> */}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </div>
       </div>
     </div>
