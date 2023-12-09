@@ -46,7 +46,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <div className="container">
       <div className="content__top">
         <Categories />
         <Sort />
@@ -55,6 +55,6 @@ export default function Home() {
       <div className="content__items">
         {renderMap[state](items)}
       </div>
-    </>
+    </div>
   );
 }
