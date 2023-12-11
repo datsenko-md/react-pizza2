@@ -41,6 +41,7 @@ export default function Home() {
         console.log(err);
       }
     };
+    window.scrollTo(0, 0);
 
     getItems();
   }, []);
