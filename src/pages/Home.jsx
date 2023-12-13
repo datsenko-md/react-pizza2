@@ -29,11 +29,22 @@ const itemsUrl = 'https://654f0f0e358230d8f0ccfb7e.mockapi.io/items';
 export default function Home() {
   const [items, setItems] = React.useState([]);
   const [state, setState] = React.useState('loading');
+  const [categoryId, setCategoryId] = React.useState(1);
+  const [sortBy, setSortBy] = React.useState({ id: 1, name: 'популярности', sort: 'rating' });
+  const [order, setOrder] = React.useState('asc');
 
   React.useEffect(() => {
     const getItems = async () => {
       try {
-        const response = await axios.get(itemsUrl);
+        const response = await axios({
+          method: 'get',
+          url: itemsUrl,
+          params: {
+            category: categoryId === 1 ? null : categoryId,
+            sortBy: sortBy.sort,
+            order: order === 'asc' ? null : order,
+          },
+        });
         setItems(response.data);
         setState('loaded');
       } catch (err) {
@@ -44,13 +55,18 @@ export default function Home() {
     window.scrollTo(0, 0);
 
     getItems();
-  }, []);
+  }, [categoryId, sortBy, order]);
 
   return (
     <div className="container">
       <div className="content__top">
-        <Categories />
-        <Sort />
+        <Categories value={categoryId} onClickCategory={(id) => setCategoryId(id)} />
+        <Sort
+          sortBy={sortBy}
+          onClickSort={(sort) => setSortBy(sort)}
+          order={order}
+          onClickOrder={(newOrder) => setOrder(newOrder)}
+        />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">

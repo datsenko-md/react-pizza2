@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 
-export default function Categories() {
+export default function Categories(props) {
   const categories = [
     { name: 'Все', id: 1 },
     { name: 'Мясные', id: 2 },
@@ -11,14 +11,14 @@ export default function Categories() {
     { name: 'Закрытые', id: 6 },
   ];
 
-  const [activeId, setActiveId] = React.useState(categories[0].id);
+  const { value, onClickCategory } = props;
 
   const renderItem = ({ name, id }) => (
     <li
       id={id}
       key={id}
-      className={cn({ active: id === activeId })}
-      onClick={() => setActiveId(id)}
+      className={cn({ active: id === value })}
+      onClick={() => onClickCategory(id)}
     >
       {name}
     </li>

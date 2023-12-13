@@ -1,44 +1,59 @@
 import React from 'react';
 import cn from 'classnames';
 
-export default function Sort() {
+export default function Sort({
+  sortBy, onClickSort, order, onClickOrder,
+}) {
   const sorts = [
-    { id: 1, name: 'популярности' },
-    { id: 2, name: 'цене' },
-    { id: 3, name: 'алфавиту' },
+    { id: 1, name: 'популярности', sort: 'rating' },
+    { id: 2, name: 'цене', sort: 'price' },
+    { id: 3, name: 'алфавиту', sort: 'title' },
   ];
 
-  const [sortId, setSortId] = React.useState(sorts[0].id);
   const [open, setOpen] = React.useState(false);
 
-  const currentSort = sorts.find((sort) => sort.id === sortId);
-
   const selectSort = (id) => () => {
-    setSortId(id);
+    onClickSort(sorts.find((s) => s.id === id));
+    onClickOrder('asc');
     setOpen(false);
   };
 
   const renderSort = ({ id, name }) => (
-    <li key={id} onClick={selectSort(id)} className={cn({ active: id === sortId })}>{name}</li>
+    <li key={id} onClick={selectSort(id)} className={cn({ active: id === sortBy.id })}>{name}</li>
+  );
+
+  const arrowUp = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      className="bi bi-caret-up-fill"
+      viewBox="0 0 16 16"
+      onClick={() => onClickOrder('desc')}
+    > <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+    </svg>
+  );
+
+  const arrowDown = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      className="bi bi-caret-down-fill"
+      viewBox="0 0 16 16"
+      onClick={() => onClickOrder('asc')}
+    > <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+    </svg>
   );
 
   return (
     <div className="sort">
       <div className="sort__label">
-        <svg
-          width="10"
-          height="6"
-          viewBox="0 0 10 6"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M10 5C10 5.16927 9.93815 5.31576 9.81445 5.43945C9.69075 5.56315 9.54427 5.625 9.375 5.625H0.625C0.455729 5.625 0.309245 5.56315 0.185547 5.43945C0.061849 5.31576 0 5.16927 0 5C0 4.83073 0.061849 4.68424 0.185547 4.56055L4.56055 0.185547C4.68424 0.061849 4.83073 0 5 0C5.16927 0 5.31576 0.061849 5.43945 0.185547L9.81445 4.56055C9.93815 4.68424 10 4.83073 10 5Z"
-            fill="#2C2C2C"
-          />
-        </svg>
+        {order === 'asc' ? arrowUp : arrowDown}
         <b>Сортировка по:</b>
-        <span onClick={() => setOpen(!open)}>{currentSort.name}</span>
+        <span onClick={() => setOpen(!open)}>{sortBy.name}</span>
       </div>
       {open && (
       <div className="sort__popup">
