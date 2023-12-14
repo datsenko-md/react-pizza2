@@ -26,7 +26,7 @@ const renderMap = {
 
 const itemsUrl = 'https://654f0f0e358230d8f0ccfb7e.mockapi.io/items';
 
-export default function Home() {
+export default function Home({ searchValue }) {
   const [items, setItems] = React.useState([]);
   const [state, setState] = React.useState('loading');
   const [categoryId, setCategoryId] = React.useState(1);
@@ -43,6 +43,7 @@ export default function Home() {
             category: categoryId === 1 ? null : categoryId,
             sortBy: sortBy.sort,
             order: order === 'asc' ? null : order,
+            search: searchValue === '' ? null : searchValue,
           },
         });
         setItems(response.data);
@@ -55,7 +56,7 @@ export default function Home() {
     window.scrollTo(0, 0);
 
     getItems();
-  }, [categoryId, sortBy, order]);
+  }, [categoryId, sortBy, order, searchValue]);
 
   return (
     <div className="container">
