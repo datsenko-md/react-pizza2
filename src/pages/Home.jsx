@@ -5,6 +5,7 @@ import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock';
+import Pagination from '../components/Pagination';
 
 const renderItems = (items, Component) => items.map((item) => (
   <Component
@@ -32,6 +33,7 @@ export default function Home({ searchValue }) {
   const [categoryId, setCategoryId] = React.useState(1);
   const [sortBy, setSortBy] = React.useState({ id: 1, name: 'популярности', sort: 'rating' });
   const [order, setOrder] = React.useState('asc');
+  const [currentPage, setCurrentPage] = React.useState(1);
 
   React.useEffect(() => {
     const getItems = async () => {
@@ -44,6 +46,8 @@ export default function Home({ searchValue }) {
             sortBy: sortBy.sort,
             order: order === 'asc' ? null : order,
             search: searchValue === '' ? null : searchValue,
+            page: currentPage,
+            limit: 4,
           },
         });
         setItems(response.data);
@@ -56,7 +60,7 @@ export default function Home({ searchValue }) {
     window.scrollTo(0, 0);
 
     getItems();
-  }, [categoryId, sortBy, order, searchValue]);
+  }, [categoryId, sortBy, order, searchValue, currentPage]);
 
   return (
     <div className="container">
@@ -73,6 +77,7 @@ export default function Home({ searchValue }) {
       <div className="content__items">
         {renderMap[state](items)}
       </div>
+      <Pagination onPageChange={setCurrentPage} />
     </div>
   );
 }
