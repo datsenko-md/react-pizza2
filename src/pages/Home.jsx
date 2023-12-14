@@ -6,6 +6,7 @@ import Sort from '../components/Sort';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock';
 import Pagination from '../components/Pagination';
+import SearchContext from '../context/SearchContext';
 
 const renderItems = (items, Component) => items.map((item) => (
   <Component
@@ -27,13 +28,14 @@ const renderMap = {
 
 const itemsUrl = 'https://654f0f0e358230d8f0ccfb7e.mockapi.io/items';
 
-export default function Home({ searchValue }) {
+export default function Home() {
   const [items, setItems] = React.useState([]);
   const [state, setState] = React.useState('loading');
   const [categoryId, setCategoryId] = React.useState(1);
   const [sortBy, setSortBy] = React.useState({ id: 1, name: 'популярности', sort: 'rating' });
   const [order, setOrder] = React.useState('asc');
   const [currentPage, setCurrentPage] = React.useState(1);
+  const { searchValue } = React.useContext(SearchContext);
 
   React.useEffect(() => {
     const getItems = async () => {

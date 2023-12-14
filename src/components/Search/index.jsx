@@ -3,8 +3,10 @@ import React from 'react';
 import styles from './Search.module.scss';
 import searchIcon from '../../assets/img/search.svg';
 import closeIcon from '../../assets/img/close.svg';
+import SearchContext from '../../context/SearchContext';
 
-function Search({ searchValue, setSearchValue }) {
+function Search() {
+  const { searchValue, setSearchValue } = React.useContext(SearchContext);
   const clearIcon = (
     <img
       onClick={() => setSearchValue('')}
