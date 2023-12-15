@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
@@ -29,11 +30,9 @@ const renderMap = {
 const itemsUrl = 'https://654f0f0e358230d8f0ccfb7e.mockapi.io/items';
 
 export default function Home() {
+  const { categoryId, sortBy, order } = useSelector((state) => state.filter);
   const [items, setItems] = React.useState([]);
   const [state, setState] = React.useState('loading');
-  const [categoryId, setCategoryId] = React.useState(1);
-  const [sortBy, setSortBy] = React.useState({ id: 1, name: 'популярности', sort: 'rating' });
-  const [order, setOrder] = React.useState('asc');
   const [currentPage, setCurrentPage] = React.useState(1);
   const { searchValue } = React.useContext(SearchContext);
 
@@ -67,13 +66,8 @@ export default function Home() {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories value={categoryId} onClickCategory={(id) => setCategoryId(id)} />
-        <Sort
-          sortBy={sortBy}
-          onClickSort={(sort) => setSortBy(sort)}
-          order={order}
-          onClickOrder={(newOrder) => setOrder(newOrder)}
-        />
+        <Categories />
+        <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">

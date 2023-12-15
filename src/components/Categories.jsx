@@ -1,7 +1,10 @@
 import React from 'react';
 import cn from 'classnames';
+import { useSelector, useDispatch } from 'react-redux';
 
-export default function Categories(props) {
+import { setCategoryId } from '../slices/filterSlice';
+
+export default function Categories() {
   const categories = [
     { name: 'Все', id: 1 },
     { name: 'Мясные', id: 2 },
@@ -11,14 +14,15 @@ export default function Categories(props) {
     { name: 'Закрытые', id: 6 },
   ];
 
-  const { value, onClickCategory } = props;
+  const categoryId = useSelector((state) => state.filter.activeCategoryId);
+  const dispatch = useDispatch();
 
   const renderItem = ({ name, id }) => (
     <li
       id={id}
       key={id}
-      className={cn({ active: id === value })}
-      onClick={() => onClickCategory(id)}
+      className={cn({ active: id === categoryId })}
+      onClick={() => dispatch(setCategoryId(id))}
     >
       {name}
     </li>
