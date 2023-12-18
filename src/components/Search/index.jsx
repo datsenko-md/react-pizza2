@@ -1,4 +1,5 @@
 import React from 'react';
+import debounce from 'lodash.debounce';
 
 import styles from './Search.module.scss';
 import searchIcon from '../../assets/img/search.svg';
@@ -6,9 +7,11 @@ import closeIcon from '../../assets/img/close.svg';
 import SearchContext from '../../context/SearchContext';
 
 function Search() {
-  const { searchValue, setSearchValue } = React.useContext(SearchContext);
+  const [value, setValue] = React.useState('');
+  const { setSearchValue } = React.useContext(SearchContext);
   const inputRef = React.useRef();
   const clearSeearchField = () => {
+    setValue('');
     setSearchValue('');
     inputRef.current.focus();
   };
@@ -20,6 +23,17 @@ function Search() {
       alt="close icon"
     />
   );
+
+  const updateSearchValue = React.useCallback(
+    debounce((search) => setSearchValue(search), 1000),
+    [],
+  );
+
+  const handleChangeInput = (search) => {
+    setValue(search);
+    updateSearchValue(search);
+  };
+
   return (
     <div className={styles.root}>
       <img className={styles.icon} src={searchIcon} alt="search icon" />
@@ -27,10 +41,10 @@ function Search() {
         ref={inputRef}
         className={styles.input}
         placeholder="Поиск"
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
+        value={value}
+        onChange={(e) => handleChangeInput(e.target.value)}
       />
-      {searchValue.length > 0 && clearIcon}
+      {value.length > 0 && clearIcon}
     </div>
   );
 }
