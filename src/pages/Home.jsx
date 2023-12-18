@@ -30,10 +30,14 @@ const renderMap = {
 const itemsUrl = 'https://654f0f0e358230d8f0ccfb7e.mockapi.io/items';
 
 export default function Home() {
-  const { categoryId, sortBy, order } = useSelector((state) => state.filter);
+  const {
+    categoryId,
+    sortBy,
+    order,
+    currentPage,
+  } = useSelector((state) => state.filter);
   const [items, setItems] = React.useState([]);
   const [state, setState] = React.useState('loading');
-  const [currentPage, setCurrentPage] = React.useState(1);
   const { searchValue } = React.useContext(SearchContext);
 
   React.useEffect(() => {
@@ -73,7 +77,7 @@ export default function Home() {
       <div className="content__items">
         {renderMap[state](items)}
       </div>
-      <Pagination onPageChange={setCurrentPage} />
+      <Pagination />
     </div>
   );
 }
