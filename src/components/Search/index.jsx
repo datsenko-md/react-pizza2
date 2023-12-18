@@ -7,9 +7,14 @@ import SearchContext from '../../context/SearchContext';
 
 function Search() {
   const { searchValue, setSearchValue } = React.useContext(SearchContext);
+  const inputRef = React.useRef();
+  const clearSeearchField = () => {
+    setSearchValue('');
+    inputRef.current.focus();
+  };
   const clearIcon = (
     <img
-      onClick={() => setSearchValue('')}
+      onClick={() => clearSeearchField()}
       className={styles.closeIcon}
       src={closeIcon}
       alt="close icon"
@@ -19,6 +24,7 @@ function Search() {
     <div className={styles.root}>
       <img className={styles.icon} src={searchIcon} alt="search icon" />
       <input
+        ref={inputRef}
         className={styles.input}
         placeholder="Поиск"
         value={searchValue}
