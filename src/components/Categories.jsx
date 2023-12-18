@@ -14,7 +14,7 @@ export default function Categories() {
     { name: 'Закрытые', id: 6 },
   ];
 
-  const categoryId = useSelector((state) => state.filter.activeCategoryId);
+  const categoryId = useSelector((state) => state.filter.categoryId);
   const dispatch = useDispatch();
 
   const renderItem = ({ name, id }) => (
