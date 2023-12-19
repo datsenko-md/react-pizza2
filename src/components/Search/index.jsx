@@ -1,5 +1,5 @@
 import React from 'react';
-import debounce from 'lodash.debounce';
+import _ from 'lodash';
 
 import styles from './Search.module.scss';
 import searchIcon from '../../assets/img/search.svg';
@@ -25,7 +25,7 @@ function Search() {
   );
 
   const updateSearchValue = React.useCallback(
-    debounce((search) => setSearchValue(search), 1000),
+    _.debounce((search) => setSearchValue(search), 1000),
     [],
   );
 
