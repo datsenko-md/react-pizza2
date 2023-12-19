@@ -1,13 +1,17 @@
 import React from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import qs from 'qs';
+// import _ from 'lodash';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import Categories from '../components/Categories';
-import Sort from '../components/Sort';
+import Sort, { sorts } from '../components/Sort';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock';
 import Pagination from '../components/Pagination';
 import SearchContext from '../context/SearchContext';
+import { setFilters } from '../slices/filterSlice';
 
 const renderItems = (items, Component) => items.map((item) => (
   <Component
@@ -36,9 +40,28 @@ export default function Home() {
     order,
     currentPage,
   } = useSelector((state) => state.filter);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isSearch = React.useRef(false);
+  const isMounted = React.useRef(false);
+
   const [items, setItems] = React.useState([]);
   const [state, setState] = React.useState('loading');
   const { searchValue } = React.useContext(SearchContext);
+
+  React.useEffect(() => {
+    if (window.location.search.length > 0) {
+      const params = qs.parse(window.location.search.substring(1));
+      const sort = sorts.find((s) => s.sort === params.sortBy);
+      dispatch(setFilters({
+        ...params,
+        sort,
+      }));
+      // navigate('');
+      isSearch.current = true;
+    }
+  }, []);
 
   React.useEffect(() => {
     const getItems = async () => {
@@ -57,15 +80,33 @@ export default function Home() {
         });
         setItems(response.data);
         setState('loaded');
+        window.scrollTo(0, 0);
       } catch (err) {
         // eslint-disable-next-line
         console.log(err);
       }
     };
-    window.scrollTo(0, 0);
 
-    getItems();
+    if (!isSearch.current) {
+      getItems();
+    }
+
+    isSearch.current = false;
   }, [categoryId, sortBy, order, searchValue, currentPage]);
+
+  React.useEffect(() => {
+    if (isMounted.current) {
+      const queryString = qs.stringify({
+        categoryId,
+        order,
+        currentPage,
+        sortBy: sortBy.sort,
+      });
+      navigate(`?${queryString}`);
+    }
+
+    isMounted.current = true;
+  }, [categoryId, sortBy, order, currentPage]);
 
   return (
     <div className="container">
@@ -77,7 +118,7 @@ export default function Home() {
       <div className="content__items">
         {renderMap[state](items)}
       </div>
-      <Pagination />
+      <Pagination currentPage={currentPage} />
     </div>
   );
 }

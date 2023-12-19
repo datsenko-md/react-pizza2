@@ -7,13 +7,13 @@ import { setSortBy, toggleOrder, setOrder } from '../slices/filterSlice';
 import arrowDown from '../assets/img/arrow-down.svg';
 import arrowUp from '../assets/img/arrow-up.svg';
 
-export default function Sort() {
-  const sorts = [
-    { id: 1, name: 'популярности', sort: 'rating' },
-    { id: 2, name: 'цене', sort: 'price' },
-    { id: 3, name: 'алфавиту', sort: 'title' },
-  ];
+export const sorts = [
+  { id: 1, name: 'популярности', sort: 'rating' },
+  { id: 2, name: 'цене', sort: 'price' },
+  { id: 3, name: 'алфавиту', sort: 'title' },
+];
 
+export default function Sort() {
   const { order, sortBy } = useSelector((state) => state.filter);
   const dispatch = useDispatch();
 

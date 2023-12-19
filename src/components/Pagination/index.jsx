@@ -6,7 +6,7 @@ import styles from './Pagination.module.scss';
 
 import { setCurrentPage } from '../../slices/filterSlice';
 
-function Pagination() {
+function Pagination({ currentPage }) {
   const dispatch = useDispatch();
 
   return (
@@ -15,6 +15,7 @@ function Pagination() {
       nextLabel=">"
       onPageChange={(event) => dispatch(setCurrentPage(event.selected + 1))}
       pageRangeDisplayed={5}
+      forcePage={currentPage - 1}
       pageCount={3}
       previousLabel="<"
       renderOnZeroPageCount={null}
