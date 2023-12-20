@@ -18,6 +18,7 @@ export default function Sort() {
   const dispatch = useDispatch();
 
   const [open, setOpen] = React.useState(false);
+  const sortRef = React.useRef();
 
   const selectSort = (id) => () => {
     dispatch(setSortBy(sorts.find((s) => s.id === id)));
@@ -34,8 +35,20 @@ export default function Sort() {
     desc: arrowDown,
   };
 
+  React.useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.composedPath().includes(sortRef.current)) {
+        setOpen(false);
+      }
+    };
+
+    document.body.addEventListener('click', handleClickOutside);
+
+    return () => document.body.removeEventListener('click', handleClickOutside);
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <img src={orderMap[order]} alt="arrow" onClick={() => dispatch(toggleOrder())} />
         <b>Сортировка по:</b>
