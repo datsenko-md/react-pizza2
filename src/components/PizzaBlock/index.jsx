@@ -9,13 +9,15 @@ const getItemCount = (id, items) => {
   const item = items.find((i) => i.id === id);
   return item ? item.count : 0;
 };
+
+export const typeNames = ['тонкое', 'традиционное'];
+
 export default function PizzaBlock({
   id, title, price, imageUrl, sizes, types,
 }) {
   const dispatch = useDispatch();
   const [activeType, setActiveType] = React.useState(types[0]);
   const [activeSize, setActiveSize] = React.useState(0);
-  const typeNames = ['тонкое', 'традиционное'];
   const cart = useSelector((state) => state.cart);
   const count = getItemCount(id, cart.items);
   const item = {
@@ -23,7 +25,7 @@ export default function PizzaBlock({
     title,
     price,
     imageUrl,
-    size: activeSize,
+    size: sizes[activeSize],
     type: activeType,
   };
 
