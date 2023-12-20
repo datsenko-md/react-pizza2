@@ -25,10 +25,12 @@ const renderItems = (items, Component) => items.map((item) => (
   />
 ));
 
+const itemsLimit = 4;
+
 const getFakeItems = (length) => [...Array(length)].map((_, id) => ({ id }));
 
 const renderMap = {
-  loading: () => renderItems(getFakeItems(6), Skeleton),
+  loading: () => renderItems(getFakeItems(itemsLimit), Skeleton),
   loaded: (items) => renderItems(items, PizzaBlock),
 };
 
@@ -76,7 +78,7 @@ export default function Home() {
             order: order === 'asc' ? null : order,
             search: searchValue === '' ? null : searchValue,
             page: currentPage,
-            limit: 4,
+            limit: itemsLimit,
           },
         });
         setItems(response.data);
