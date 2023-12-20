@@ -8,6 +8,7 @@ import { ReactComponent as ArrowLeftLogo } from '../assets/img/arrow-left-cart.s
 
 import { clearItems } from '../slices/cartSlice';
 import CartItem from '../components/CartItem';
+import CartEmpty from '../components/CartEmpty';
 
 const renderItems = (items) => items.map((i) => (
   <CartItem
@@ -26,6 +27,10 @@ export default function Cart() {
   const dispatch = useDispatch();
   const { totalPrice, items } = useSelector((state) => state.cart);
   const totalCount = items.reduce((acc, item) => acc + item.count, 0);
+
+  if (items.length === 0) {
+    return <CartEmpty />;
+  }
 
   return (
     <div className="container container--cart">
