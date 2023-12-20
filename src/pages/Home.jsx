@@ -15,6 +15,7 @@ import { setFilters } from '../slices/filterSlice';
 
 const renderItems = (items, Component) => items.map((item) => (
   <Component
+    id={item.id}
     key={item.id}
     title={item.title}
     price={item.price}
