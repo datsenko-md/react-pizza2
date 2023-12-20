@@ -20,9 +20,7 @@ const cartSlice = createSlice({
       } else {
         state.items.push({ ...action.payload, count: 1 });
       }
-      // console.log(state.items, state.totalPrice);
       state.totalPrice = getTotalPrice(state.items);
-      // console.log(state.totalPrice);
     },
     removeItem: (state, action) => {
       state.items = state.items.filter((i) => i.id !== action.id);
