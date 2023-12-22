@@ -8,8 +8,8 @@ import Sort, { sorts } from '../components/Sort';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock';
 import Pagination from '../components/Pagination';
-import { setFilters } from '../slices/filterSlice';
-import { fetchPizzas } from '../slices/pizzasSlice';
+import { selectFilter, setFilters } from '../slices/filterSlice';
+import { fetchPizzas, selectPizzas } from '../slices/pizzasSlice';
 
 const renderItems = (items, Component) => items.map((item) => (
   <Component
@@ -32,14 +32,14 @@ export default function Home() {
   const isMounted = React.useRef(false);
   const {
     categoryId, sortBy, order, currentPage, searchValue, itemsLimit,
-  } = useSelector((state) => state.filter);
+  } = useSelector(selectFilter);
 
   const renderMap = {
     loading: () => renderItems(getFakeItems(itemsLimit), Skeleton),
     idle: (items) => renderItems(items, PizzaBlock),
   };
 
-  const { items, loadingStatus } = useSelector((state) => state.pizzas);
+  const { items, loadingStatus } = useSelector(selectPizzas);
 
   React.useEffect(() => {
     if (window.location.search.length > 0) {

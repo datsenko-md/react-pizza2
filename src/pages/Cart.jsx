@@ -6,7 +6,7 @@ import { ReactComponent as CartLogo } from '../assets/img/cart-cart.svg';
 import { ReactComponent as ClearLogo } from '../assets/img/clear-cart.svg';
 import { ReactComponent as ArrowLeftLogo } from '../assets/img/arrow-left-cart.svg';
 
-import { clearItems } from '../slices/cartSlice';
+import { clearItems, selectCart } from '../slices/cartSlice';
 import CartItem from '../components/CartItem';
 import CartEmpty from '../components/CartEmpty';
 
@@ -25,7 +25,7 @@ const renderItems = (items) => items.map((i) => (
 
 export default function Cart() {
   const dispatch = useDispatch();
-  const { totalPrice, items } = useSelector((state) => state.cart);
+  const { totalPrice, items } = useSelector(selectCart);
   const totalCount = items.reduce((acc, item) => acc + item.count, 0);
 
   if (items.length === 0) {
