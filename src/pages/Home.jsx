@@ -79,20 +79,27 @@ export default function Home() {
         <Categories />
         <Sort />
       </div>
-      {loadingStatus === 'failed' ? (
-        <div className="content__error-info">
+      {loadingStatus === 'failed' && (
+        <div className="content__error-info message">
           <h2>Произошла ошибка <icon>😕</icon></h2>
           <p>Не удалось получить пиццы</p>
         </div>
-      ) : (
+      )}
+      {loadingStatus === 'no-content' && (
+        <div className="content__no-items message">
+          <h2>Пицц нет <icon>😕</icon></h2>
+          <p>По вашему запросу нет пицц</p>
+        </div>
+      )}
+      {loadingStatus === 'idle' && (
         <>
           <h2 className="content__title">Все пиццы</h2>
           <div className="content__items">
             {renderMap[loadingStatus](items)}
           </div>
+          <Pagination currentPage={currentPage} />
         </>
       )}
-      <Pagination currentPage={currentPage} />
     </div>
   );
 }

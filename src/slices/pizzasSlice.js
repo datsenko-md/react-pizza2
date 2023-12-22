@@ -6,7 +6,7 @@ import { getItemsUrl } from '../routes';
 
 const initialState = {
   items: [],
-  loadingStatus: 'idle',
+  loadingStatus: 'idle', // loading | failed | no-content
   error: null,
 };
 
@@ -44,7 +44,7 @@ const pizzasSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchPizzas.fulfilled, (state, action) => {
-        state.loadingStatus = 'idle';
+        state.loadingStatus = action.payload.length > 0 ? 'idle' : 'no-content';
         state.error = null;
         state.items = action.payload;
       })
