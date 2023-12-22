@@ -1,7 +1,5 @@
 import React from 'react';
-import axios from 'axios';
 import qs from 'qs';
-// import _ from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,8 +8,8 @@ import Sort, { sorts } from '../components/Sort';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock';
 import Pagination from '../components/Pagination';
-import SearchContext from '../context/SearchContext';
 import { setFilters } from '../slices/filterSlice';
+import { fetchPizzas } from '../slices/pizzasSlice';
 
 const renderItems = (items, Component) => items.map((item) => (
   <Component
@@ -25,73 +23,37 @@ const renderItems = (items, Component) => items.map((item) => (
   />
 ));
 
-const itemsLimit = 4;
-
 const getFakeItems = (length) => [...Array(length)].map((_, id) => ({ id }));
 
-const renderMap = {
-  loading: () => renderItems(getFakeItems(itemsLimit), Skeleton),
-  loaded: (items) => renderItems(items, PizzaBlock),
-};
-
-const itemsUrl = 'https://654f0f0e358230d8f0ccfb7e.mockapi.io/items';
-
 export default function Home() {
-  const {
-    categoryId,
-    sortBy,
-    order,
-    currentPage,
-  } = useSelector((state) => state.filter);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
+  const {
+    categoryId, sortBy, order, currentPage, searchValue, itemsLimit,
+  } = useSelector((state) => state.filter);
 
-  const [items, setItems] = React.useState([]);
-  const [state, setState] = React.useState('loading');
-  const { searchValue } = React.useContext(SearchContext);
+  const renderMap = {
+    loading: () => renderItems(getFakeItems(itemsLimit), Skeleton),
+    idle: (items) => renderItems(items, PizzaBlock),
+  };
+
+  const { items, loadingStatus } = useSelector((state) => state.pizzas);
 
   React.useEffect(() => {
     if (window.location.search.length > 0) {
       const params = qs.parse(window.location.search.substring(1));
       const sort = sorts.find((s) => s.sort === params.sortBy);
-      dispatch(setFilters({
-        ...params,
-        sort,
-      }));
-      // navigate('');
+      dispatch(setFilters({ ...params, sort }));
       isSearch.current = true;
     }
   }, []);
 
   React.useEffect(() => {
-    const getItems = async () => {
-      try {
-        const response = await axios({
-          method: 'get',
-          url: itemsUrl,
-          params: {
-            category: categoryId === 1 ? null : categoryId,
-            sortBy: sortBy.sort,
-            order: order === 'asc' ? null : order,
-            search: searchValue === '' ? null : searchValue,
-            page: currentPage,
-            limit: itemsLimit,
-          },
-        });
-        setItems(response.data);
-        setState('loaded');
-        window.scrollTo(0, 0);
-      } catch (err) {
-        // eslint-disable-next-line
-        console.log(err);
-      }
-    };
-
     if (!isSearch.current) {
-      getItems();
+      dispatch(fetchPizzas());
+      window.scrollTo(0, 0);
     }
 
     isSearch.current = false;

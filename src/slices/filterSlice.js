@@ -6,6 +6,8 @@ const initialState = {
   order: 'asc',
   sortBy: { id: 1, name: 'популярности', sort: 'rating' },
   currentPage: 1,
+  searchValue: '',
+  itemsLimit: 4,
 };
 
 const filterSlice = createSlice({
@@ -32,6 +34,10 @@ const filterSlice = createSlice({
       state.currentPage = Number(action.payload.currentPage);
       state.order = action.payload.order;
       state.sortBy = action.payload.sort;
+      state.searchValue = action.payload.search;
+    },
+    setSearchValue: (state, action) => {
+      state.searchValue = action.payload;
     },
   },
 });
@@ -43,8 +49,7 @@ export const {
   setSortBy,
   setCurrentPage,
   setFilters,
+  setSearchValue,
 } = filterSlice.actions;
 
 export default filterSlice.reducer;
-
-// filter, pizzas, cart

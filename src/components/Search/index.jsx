@@ -1,18 +1,21 @@
 import React from 'react';
 import _ from 'lodash';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './Search.module.scss';
 import searchIcon from '../../assets/img/search.svg';
 import closeIcon from '../../assets/img/close.svg';
-import SearchContext from '../../context/SearchContext';
+import { setSearchValue } from '../../slices/filterSlice';
 
 function Search() {
-  const [value, setValue] = React.useState('');
-  const { setSearchValue } = React.useContext(SearchContext);
+  const dispatch = useDispatch();
+  const { searchValue } = useSelector((state) => state.filter);
+  const [value, setValue] = React.useState(searchValue);
+
   const inputRef = React.useRef();
   const clearSeearchField = () => {
     setValue('');
-    setSearchValue('');
+    dispatch(setSearchValue(''));
     inputRef.current.focus();
   };
   const clearIcon = (
@@ -25,7 +28,7 @@ function Search() {
   );
 
   const updateSearchValue = React.useCallback(
-    _.debounce((search) => setSearchValue(search), 1000),
+    _.debounce((search) => dispatch(setSearchValue(search)), 1000),
     [],
   );
 
