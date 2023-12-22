@@ -79,10 +79,19 @@ export default function Home() {
         <Categories />
         <Sort />
       </div>
-      <h2 className="content__title">Все пиццы</h2>
-      <div className="content__items">
-        {renderMap[state](items)}
-      </div>
+      {loadingStatus === 'failed' ? (
+        <div className="content__error-info">
+          <h2>Произошла ошибка <icon>😕</icon></h2>
+          <p>Не удалось получить пиццы</p>
+        </div>
+      ) : (
+        <>
+          <h2 className="content__title">Все пиццы</h2>
+          <div className="content__items">
+            {renderMap[loadingStatus](items)}
+          </div>
+        </>
+      )}
       <Pagination currentPage={currentPage} />
     </div>
   );
